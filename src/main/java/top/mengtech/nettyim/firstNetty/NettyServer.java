@@ -12,6 +12,7 @@ import io.netty.handler.codec.string.StringDecoder;
 public class NettyServer {
 
     public static void main(String[] args) {
+        // 引导类
         ServerBootstrap serverBootstrap = new ServerBootstrap();
 
         // 接活，获取新的连接的线程组
@@ -20,9 +21,9 @@ public class NettyServer {
         NioEventLoopGroup child = new NioEventLoopGroup();
 
         serverBootstrap
-                .group(parent,child)
-                .channel(NioServerSocketChannel.class)
-                .childHandler(new ChannelInitializer<NioSocketChannel>() {
+                .group(parent,child)    // 线程模型
+                .channel(NioServerSocketChannel.class)  // 指定服务端IO模型
+                .childHandler(new ChannelInitializer<NioSocketChannel>() {  // 读写处理逻辑
                     @Override
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
                         nioSocketChannel.pipeline().addLast(new StringDecoder());
@@ -34,6 +35,6 @@ public class NettyServer {
                         });
                     }
                 })
-                .bind(8000);
+                .bind(8000);    // 绑定端口
     }
 }
