@@ -16,12 +16,15 @@ public class NettyClient {
 
         NioEventLoopGroup group = new NioEventLoopGroup();
 
-        bootstrap.group(group).channel(NioSocketChannel.class).handler(new ChannelInitializer<NioSocketChannel>() {
-            @Override
-            protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
-                nioSocketChannel.pipeline().addLast(new StringEncoder());
-            }
-        });
+        bootstrap
+                .group(group)
+                .channel(NioSocketChannel.class)
+                .handler(new ChannelInitializer<NioSocketChannel>() {
+                    @Override
+                    protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
+                        nioSocketChannel.pipeline().addLast(new StringEncoder());
+                    }
+                });
 
         Channel channel = bootstrap.connect("127.0.0.1",8000).channel();
 
