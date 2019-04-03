@@ -3,6 +3,7 @@ package top.mengtech.nettyim.firstNetty;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -10,8 +11,11 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import top.mengtech.nettyim.handler.FirstServerHandler;
 
 public class NettyServer {
+
+    private static final int PORT = 8000;
 
     public static void main(String[] args) {
         // 引导类
@@ -31,23 +35,20 @@ public class NettyServer {
                         System.out.println("服务端启动中。。。");
                     }
                 })
+                .option(ChannelOption.SO_BACKLOG, 1024)
+                .childOption(ChannelOption.SO_KEEPALIVE, true)
+                .childOption(ChannelOption.TCP_NODELAY, true)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {  // 通道连接时候的逻辑，读写处理逻辑
                     @Override
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
 
-                        nioSocketChannel.pipeline().addLast(new StringDecoder());
+                        nioSocketChannel.pipeline().addLast(new FirstServerHandler());
 
-                        nioSocketChannel.pipeline().addLast(new SimpleChannelInboundHandler<String>() {
-                            @Override
-                            protected void channelRead0(ChannelHandlerContext channelHandlerContext, String s) throws Exception {
-                                System.out.println("id:"+nioSocketChannel.id()+",msg:"+s);
-                            }
-                        });
                     }
                 });
                 //.bind(8000);    // 绑定端口
 
-        bind(serverBootstrap,1000);
+        bind(serverBootstrap,PORT);
 
     }
 
