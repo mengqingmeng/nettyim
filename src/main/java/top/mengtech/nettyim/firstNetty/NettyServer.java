@@ -25,10 +25,18 @@ public class NettyServer {
         serverBootstrap
                 .group(parent,child)    // 线程模型
                 .channel(NioServerSocketChannel.class)  // 指定服务端IO模型
-                .childHandler(new ChannelInitializer<NioSocketChannel>() {  // 读写处理逻辑
+                .handler(new ChannelInitializer<NioServerSocketChannel>() { // 服务端启动的逻辑
+                    @Override
+                    protected void initChannel(NioServerSocketChannel ch) throws Exception {
+                        System.out.println("服务端启动中。。。");
+                    }
+                })
+                .childHandler(new ChannelInitializer<NioSocketChannel>() {  // 通道连接时候的逻辑，读写处理逻辑
                     @Override
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
+
                         nioSocketChannel.pipeline().addLast(new StringDecoder());
+
                         nioSocketChannel.pipeline().addLast(new SimpleChannelInboundHandler<String>() {
                             @Override
                             protected void channelRead0(ChannelHandlerContext channelHandlerContext, String s) throws Exception {
