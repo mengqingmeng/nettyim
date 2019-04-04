@@ -2,17 +2,14 @@ package top.mengtech.nettyim.utils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
-import top.mengtech.nettyim.protocol.packet.LoginRequestPacket;
-import top.mengtech.nettyim.protocol.packet.LoginResponsePacket;
-import top.mengtech.nettyim.protocol.packet.Packet;
+import top.mengtech.nettyim.protocol.packet.*;
 import top.mengtech.nettyim.protocol.serializer.JSONSerializer;
 import top.mengtech.nettyim.protocol.serializer.Serializer;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static top.mengtech.nettyim.protocol.command.Command.LOGIN_REQUEST;
-import static top.mengtech.nettyim.protocol.command.Command.LOGIN_RESPONSE;
+import static top.mengtech.nettyim.protocol.command.Command.*;
 
 /**
  * packet 编码、解码工具类
@@ -35,6 +32,8 @@ public class PacketCodeC {
 
         packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
         packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
+        packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
+        packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();

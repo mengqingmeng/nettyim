@@ -3,9 +3,7 @@ package top.mengtech.nettyim.handler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import top.mengtech.nettyim.protocol.packet.LoginRequestPacket;
-import top.mengtech.nettyim.protocol.packet.LoginResponsePacket;
-import top.mengtech.nettyim.protocol.packet.Packet;
+import top.mengtech.nettyim.protocol.packet.*;
 import top.mengtech.nettyim.utils.PacketCodeC;
 
 import java.nio.charset.Charset;
@@ -35,6 +33,14 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             }
             // 登录响应
             ByteBuf responseByteBuf = PacketCodeC.INSTANCE.encode(ctx.alloc(), loginResponsePacket);
+            ctx.channel().writeAndFlush(responseByteBuf);
+        }else if (packet instanceof MessageRequestPacket){// 响应消息
+            MessageRequestPacket messageRequestPacket = (MessageRequestPacket) packet;
+            System.out.println(new Date() + "：收到客户端消息："+messageRequestPacket.getMessage());
+
+            MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
+            messageResponsePacket.setMessage("服务端回复【" + messageRequestPacket.getMessage() + "】");
+            ByteBuf responseByteBuf = PacketCodeC.INSTANCE.encode(ctx.alloc(), messageResponsePacket);
             ctx.channel().writeAndFlush(responseByteBuf);
         }
     }
