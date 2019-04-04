@@ -5,7 +5,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import top.mengtech.nettyim.handler.FirstClientHandler;
+import top.mengtech.nettyim.handler.ClientHandler;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +30,7 @@ public class NettyClient {
                     @Override
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
 //                        nioSocketChannel.pipeline().addLast(new StringEncoder());
-                        nioSocketChannel.pipeline().addLast(new FirstClientHandler());
+                        nioSocketChannel.pipeline().addLast(new ClientHandler());
                     }
                 });
 

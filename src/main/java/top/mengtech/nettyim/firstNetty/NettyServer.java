@@ -1,17 +1,14 @@
 package top.mengtech.nettyim.firstNetty;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import top.mengtech.nettyim.handler.FirstServerHandler;
+import top.mengtech.nettyim.handler.ServerHandler;
 
 public class NettyServer {
 
@@ -42,7 +39,7 @@ public class NettyServer {
                     @Override
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
 
-                        nioSocketChannel.pipeline().addLast(new FirstServerHandler());
+                        nioSocketChannel.pipeline().addLast(new ServerHandler());
 
                     }
                 });
