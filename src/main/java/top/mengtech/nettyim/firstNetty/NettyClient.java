@@ -9,9 +9,13 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import top.mengtech.nettyim.handler.ClientHandler;
+import top.mengtech.nettyim.handler.LoginResponseHandler;
+import top.mengtech.nettyim.handler.MessageResponseHandler;
 import top.mengtech.nettyim.protocol.packet.MessageRequestPacket;
 import top.mengtech.nettyim.utils.LoginUtil;
 import top.mengtech.nettyim.utils.PacketCodeC;
+import top.mengtech.nettyim.utils.PacketDecoder;
+import top.mengtech.nettyim.utils.PacketEncoder;
 
 import java.util.Date;
 import java.util.Scanner;
@@ -36,8 +40,10 @@ public class NettyClient {
                 .handler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
-//                        nioSocketChannel.pipeline().addLast(new StringEncoder());
-                        nioSocketChannel.pipeline().addLast(new ClientHandler());// 逻辑处理
+                        nioSocketChannel.pipeline().addLast(new PacketDecoder());
+                        nioSocketChannel.pipeline().addLast(new LoginResponseHandler());
+                        nioSocketChannel.pipeline().addLast(new MessageResponseHandler());
+                        nioSocketChannel.pipeline().addLast(new PacketEncoder());
                     }
                 });
 
@@ -84,8 +90,7 @@ public class NettyClient {
                     MessageRequestPacket packet = new MessageRequestPacket();
                     packet.setMessage(line);
 
-                    ByteBuf byteBuf = PacketCodeC.INSTANCE.encode(channel.alloc(),packet);
-                    channel.writeAndFlush(byteBuf);
+                    channel.writeAndFlush(packet);
                 }
             }
         }).start();

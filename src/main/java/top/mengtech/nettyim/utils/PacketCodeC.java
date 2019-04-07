@@ -61,13 +61,11 @@ public class PacketCodeC {
 
     /**
      * 编码
-     * @param byteBufAllocator
+     * @param byteBuf
      * @param packet
      * @return
      */
-    public ByteBuf encode(ByteBufAllocator byteBufAllocator,Packet packet){
-
-        ByteBuf byteBuf = byteBufAllocator.ioBuffer();
+    public ByteBuf encode(ByteBuf byteBuf,Packet packet){
 
         // 序列化java对象
         byte[] bytes = Serializer.DEFAULT.serialize(packet);

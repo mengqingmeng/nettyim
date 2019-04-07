@@ -8,7 +8,9 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import top.mengtech.nettyim.handler.ServerHandler;
+import top.mengtech.nettyim.handler.*;
+import top.mengtech.nettyim.utils.PacketDecoder;
+import top.mengtech.nettyim.utils.PacketEncoder;
 
 public class NettyServer {
 
@@ -39,8 +41,13 @@ public class NettyServer {
                     @Override
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
 
-                        nioSocketChannel.pipeline().addLast(new ServerHandler());
+//                        nioSocketChannel.pipeline().addLast(new ServerHandler());
+                        nioSocketChannel.pipeline().addLast(new PacketDecoder());   // 解码
 
+                        nioSocketChannel.pipeline().addLast(new LoginRequestHandler());
+                        nioSocketChannel.pipeline().addLast(new MessageRequestHandler());
+
+                        nioSocketChannel.pipeline().addLast(new PacketEncoder());   // 编码
                     }
                 });
                 //.bind(8000);    // 绑定端口
